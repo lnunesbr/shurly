@@ -1,3 +1,4 @@
+// $Id$
 Drupal.behaviors.shurly = function() {
   $('#edit-result').focus(function(){
     $(this).select();

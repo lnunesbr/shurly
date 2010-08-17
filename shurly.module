@@ -1,5 +1,4 @@
 <?php
-
 // $Id$
 
 /**
@@ -785,7 +784,7 @@ function shurly_goto($row) {
   if (!defined('MAINTENANCE_MODE') || MAINTENANCE_MODE != 'update') {
     // Allow other modules to implement hook_shurly_redirect()
     // to add additional logging information to the database or perform other tasks
-    module_invoke_all('shurly_redirect', $row);
+    module_invoke_all('shurly_redirect_before', $row);
   
     // Allow modules to react to the end of the page request before redirecting.
     module_invoke_all('exit', $url);
@@ -796,9 +795,17 @@ function shurly_goto($row) {
   session_write_close();
 
   header('Location: '. $url, TRUE, 301);
+    
+  // header has been sent... browser has been redirected
+  // now we can do any expensive operations
   
   // update access information on this row
   db_query('UPDATE {shurly} SET count = count + 1, last_used = %d WHERE rid = %d', time(), $row->rid);
+  
+  // note: Other modules should insert more information in the database by using
+  // hook_db_rewrite_sql() rather than creating a new db call
+  
+  module_invoke_all('shurly_redirect_after', $row);
 
   // The "Location" header sends a redirect status code to the HTTP daemon. In
   // some cases this can be wrong, so we make sure none of the code below the
