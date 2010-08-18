@@ -15,13 +15,14 @@ Features: -------------------------
 - Extensive role-based permissions
 - Click-to-copy-to-clipboard functionality on short URLs
 - Click tracking on each short URL
-- Short URLs are associated with user accounts. Logged-in users can see history of the URLs they've created as well as the number of clicks on each.
+- Short URLs are associated with user accounts. Logged-in users can see their URLs history as well as the number of clicks on each.
 - "Drag to bookmark bar" Javascript bookmarklet to create URLs quickly from any web page
 - Blocks for URL creation form, bookmarklet, and URL history
 - Views integration. Short URLs are displayable objects
-- hook_boot() for fast, efficient, and early redirection. Doesn't require a full Drupal bootstrap to redirect. Also redirection works even if page caching is turned on.
+- Magic happens during hook_boot() for fast, efficient, and early redirection. Doesn't require a full Drupal bootstrap to redirect. Also redirection works even if page caching is turned on. If unsupported short-url characters (such as "/") are part of the incoming URL, ShURLy doesn't even add a database query.
 - Web services API to shorten/expand URLs
 - Per-user API key generation to allow user-associated web services interaction
+- hook_shurly_redirect_before() and hook_shurly_redirect_after() allows other modules to tap in and alter the redirection, or log additional info to the database (IP tracking, anyone?)
 
 Views: ----------------------------
 ShURLy is completely integrated with the Views module and ShURLy links can be listed/sorted/displayed using Views. Views is a dependency of this module since all listings are created using Views, including the administrative page at admin/build/shurly. Views also provides a page at /myurls where users with "View own URL stats" can see & sort their URLs.
