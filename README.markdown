@@ -20,11 +20,11 @@ Features
 - "Drag to bookmark bar" Javascript bookmarklet to create URLs quickly from any web page
 - Blocks for URL creation form, bookmarklet, and URL history
 - Views integration. Short URLs are displayable objects
-- Magic happens during hook_boot() for fast, efficient, and early redirection. Doesn't require a full Drupal bootstrap to redirect. Also redirection works even if page caching is turned on. If unsupported short-url characters (such as "/") are part of the incoming URL, ShURLy doesn't even add a database query.
+- Magic happens during `hook_boot()` for fast, efficient, and early redirection. Doesn't require a full Drupal bootstrap to redirect. Also redirection works even if page caching is turned on. If unsupported short-url characters (such as "/") are part of the incoming URL, ShURLy doesn't even add a database query.
 - Web services API to shorten/expand URLs
 - Supports configurable per-role rate limiting. Roles can be limited to {X} requests every {Y} minutes to prevent automated misuse of the website or API.
 - Per-user API key generation to allow user-associated web services interaction
-- hook_shurly_redirect_before() and hook_shurly_redirect_after() allows other modules to tap in and alter the redirection, or log additional info to the database (IP tracking, anyone?)
+- `hook_shurly_redirect_before()` and `hook_shurly_redirect_after()` allows other modules to tap in and alter the redirection, or log additional info to the database (IP tracking, anyone?)
 
 USAGE
 ----------------------------
