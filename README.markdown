@@ -1,8 +1,6 @@
 // `$Id$`
 
-ShURLy is a URL shortening service implemented as a module for Drupal. This module was written by Jeff Robbins for [Lullabot][]'s URL shortener: <http://lb.cm>
-
-<http://www.youtube.com/watch?v=Qo7qoonzTCE>
+ShURLy is a URL shortening service implemented as a module for Drupal. This module was written by Jeff Robbins for [Lullabot](http://lullabot.com)'s URL shortener: <http://lb.cm>
 
 It is intended to be fast, clean, simple, self-contained, user-friendly, flexible, and easy to set up.
 
@@ -77,5 +75,13 @@ Permissions
     This permission allows users to edit/delete/view all short URLs by 
     all users. This is the administrative permission and should be 
     used carefully
+    
+Links
+---------------------
+**GitHub page** (main development version): <http://github.com/Lullabot/shurly>  
+**Drupal.org page**: <http://drupal.org/project/shurly>  
+**Demo**: <http://lb.cm>
+**Inspiration**: <http://www.youtube.com/watch?v=Qo7qoonzTCE>
+**Lullabot**: <http://www.lullabot.com>
 
-[Lullabot]: http://www.lullabot.com
+I *am* serious, and *don't* call me Shurly!
