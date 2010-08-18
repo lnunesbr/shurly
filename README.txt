@@ -1,6 +1,6 @@
 // $Id$
 
-ShURLy is a URL shortening service implemented as a module for Drupal. This module was written by Jeff Robbins for Lullabot's "lb.cm" shortening service at http://lb.cm
+ShURLy is a URL shortening service implemented as a module for Drupal. This module was written by Jeff Robbins for Lullabot's URL shortener: http://lb.cm
 
 http://www.youtube.com/watch?v=Qo7qoonzTCE
 
