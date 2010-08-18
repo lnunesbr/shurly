@@ -80,8 +80,8 @@ Links
 ---------------------
 **GitHub page** (main development version): <http://github.com/Lullabot/shurly>  
 **Drupal.org page**: <http://drupal.org/project/shurly>  
-**Demo**: <http://lb.cm>
-**Inspiration**: <http://www.youtube.com/watch?v=Qo7qoonzTCE>
+**Demo**: <http://lb.cm>  
+**Inspiration**: <http://www.youtube.com/watch?v=Qo7qoonzTCE>  
 **Lullabot**: <http://www.lullabot.com>
 
 I *am* serious, and *don't* call me Shurly!
