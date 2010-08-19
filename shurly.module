@@ -10,6 +10,19 @@
  *   - create REST API
  *   - prevent endless loop links (back to themselves or others on this site)
  */
+ 
+/**
+ * Implementation of hook_help().
+ */
+function shurly_help($path, $arg) {
+  $output = '';
+  switch ($path) {
+    case "admin/help#shurly":
+      $output = '<div style="white-space:pre-wrap">' . htmlentities(file_get_contents('README.markdown', FILE_USE_INCLUDE_PATH)) . '</div>';
+      break;
+  }
+  return $output;
+}
 
 /**
  * Implementation of hook_menu()
@@ -194,7 +207,7 @@ function shurly_create_form($form_state) {
       '#suffix' => '</div>',
       '#field_prefix' => t('Your short URL: '),
       '#field_suffix' => ' <div id="shurly-copy-container" style="position:relative;"><div id="shurly-copy">' . t('copy') . '</div></div>
-      <div><a href="http://twitter.com?status='. urlencode($form_state['storage']['shurly']['final_url']) .'">' . t('Create a Twitter message with this link') . '</a></div></div>',
+      <div><a href="http://twitter.com?status='. urlencode($form_state['storage']['shurly']['final_url']) .'">' . t('Create a Twitter message with this URL') . '</a></div></div>',
     );
   }
   
