@@ -1,9 +1,5 @@
 // $Id$
 Drupal.behaviors.shurly = function() {
-  $('#edit-result').focus(function(){
-    $(this).select();
-  });
-  //.data('origBG', $(this).css('backgroundColor'));
   if ($('#edit-result').length) {
     var clip = new ZeroClipboard.Client();
     clip.setText($('#edit-result').val());
@@ -14,5 +10,15 @@ Drupal.behaviors.shurly = function() {
         $(this).fadeTo(1, 1).css('backgroundColor', '#FFF');
       });
     });
+    
+    $('#edit-result')
+      .focus()
+      .focus(function(e){
+        $(this).select();
+      })
+      .mouseup(function(){
+        // fix for select problem in WebKit
+        return false;
+      });
   }
 }
