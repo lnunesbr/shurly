@@ -9,6 +9,7 @@
  * Implement hook_schema().
  */
 function shurly_schema() {
+  $schema = array();
   $schema['shurly'] = array(
     'description' => t('URL redirects for the Shurly module'),
     'fields' => array(
@@ -122,7 +123,6 @@ function shurly_schema() {
  */
 function shurly_install() {
   drupal_install_schema('shurly');
-  drupal_install_schema('shurly_flood');
 }
 
 function shurly_update_6100() {
@@ -142,8 +142,10 @@ function shurly_update_6100() {
 function shurly_uninstall() {
   // Remove tables.
   drupal_uninstall_schema('shurly');
-  drupal_uninstall_schema('shurly_flood');
 
   // Remove variables.
-
+  variable_del('shurly_throttle');
+  variable_del('shurly_length');
+  variable_del('shurly_counter');
+  variable_del('shurly_index');
 }

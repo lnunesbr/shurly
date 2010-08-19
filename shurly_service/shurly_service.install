@@ -32,7 +32,7 @@ function shurly_service_schema() {
  * Implement hook_install().
  */
 function shurly_service_install() {
-  drupal_install_schema('shurly_keys');
+  drupal_install_schema('shurly_service');
 }
 
 
@@ -52,8 +52,9 @@ function shurly_service_update_6100() {
  */
 function shurly_service_uninstall() {
   // Remove tables.
-  drupal_uninstall_schema('shurly_keys');
+  drupal_uninstall_schema('shurly_service');
 
-  // Remove variables.
-
+  // No variables to remove
+  
+  
 }
