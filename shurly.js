@@ -5,9 +5,10 @@ Drupal.behaviors.shurly = function() {
     clip.setText($('#edit-result').val());
     clip.setHandCursor( true );
     clip.glue('shurly-copy', 'shurly-copy-container');
+    var origBg = $('#edit-result').css('backgroundColor');
     clip.addEventListener( 'onComplete', function() {
       $('#edit-result').css('backgroundColor', '#FFFF3F').fadeTo(300, .1, function(){
-        $(this).fadeTo(1, 1).css('backgroundColor', '#FFF');
+        $(this).fadeTo(1, 1).css('backgroundColor', origBg);
       });
     });
     
