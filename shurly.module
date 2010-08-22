@@ -722,11 +722,18 @@ function shurly_next_url() {
 }
 
 /**
- * Checks to see if there's a menu handler or a path alias for a given path
+ * Checks to see if there's a menu handler, path alias, or language prefix for a given path
  *
  * @return TRUE if there are no conflicts
  */
 function shurly_path_available($path) {
+  
+  // check to see if path represents an enabled language
+  $languages = language_list();
+  if (array_key_exists($path, $languages)) {
+    return FALSE;
+  }
+  
   $return = TRUE;
   // see if $path is an alias
   $source = drupal_lookup_path('source', $path);
