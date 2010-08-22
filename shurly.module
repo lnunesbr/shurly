@@ -6,9 +6,8 @@
  *
  * @todo
  *   - click to copy link in views
- *   - fix zeroclipboard position in Chrome
- *   - create REST API
- *   - prevent endless loop links (back to themselves or others on this site)
+ *   - add some watchdog logging
+ *   - remove "http://" from the long URL field when you click in
  */
  
 /**
@@ -83,7 +82,7 @@ function shurly_block($op = 'list', $delta = 0, $edit = array()) {
       if ($delta == 'bookmarklet' && user_access('Create short URLs')) {
         drupal_add_css(drupal_get_path('module', 'shurly') . '/shurly.css');
         $block = array('subject' => t('Bookmarklet'),
-          'content' => t("<p>Drag this link to your bookmark bar to quickly create a short URL from any page: <a class=\"shurly-bookmarklet\" href=\"!jsurl\">!sitename</a></p>", array('!jsurl' => "javascript:void(location.href='". url('shurly', array('absolute' => TRUE)) ."?url='+encodeURIComponent(location.href))", '!sitename' => variable_get('site_name', 'Drupal'))),
+          'content' => t("<p>Drag this link to your bookmark bar to quickly create a short URL from any page: <a class=\"shurly-bookmarklet\" href=\"!jsurl\">!sitename</a></p>", array('!jsurl' => "javascript:void(location.href='". _surl('shurly', array('absolute' => TRUE)) ."?url='+encodeURIComponent(location.href))", '!sitename' => variable_get('site_name', 'Drupal'))),
         );
         return $block;
       }
@@ -222,7 +221,7 @@ function theme_shurly_create_form($form) {
   drupal_add_css($path . '/shurly.css');
   drupal_add_js($path . '/zeroclipboard/ZeroClipboard.js');
   drupal_add_js($path . '/shurly.js');
-  drupal_add_js("ZeroClipboard.setMoviePath( '". url($path .'/zeroclipboard/ZeroClipboard.swf') ."' );", 'inline');
+  drupal_add_js("ZeroClipboard.setMoviePath( '". base_path() . $path .'/zeroclipboard/ZeroClipboard.swf' ."' );", 'inline');
   $output = '';
   $output .= '<div class="container-inline">';
   $output .= drupal_render($form['long_url']);
@@ -276,7 +275,7 @@ function shurly_create_form_validate(&$form, &$form_state) {
       //  drupal_set_message(t('This URL pair already exists'), 'error');
       //}
     }
-    elseif (url($vals['short_url'], array('absolute' => TRUE)) == $vals['long_url']) {
+    elseif (_surl($vals['short_url'], array('absolute' => TRUE)) == $vals['long_url']) {
       // check that link isn't to itself (creating infinite loop)
       // problem - http vs https
       form_set_error('short_url', t('You cannot create links to themselves'));
@@ -306,7 +305,7 @@ function shurly_create_form_submit($form, &$form_state) {
   // submit the short URL form
   $long_url = $form_state['storage']['shurly']['long_url'] = $form_state['values']['long_url'];
   $short_url = $form_state['storage']['shurly']['short_url'] = $form_state['values']['short_url'];
-  $final_url = $form_state['storage']['shurly']['final_url'] = rawurldecode(url($short_url, array('absolute' => TRUE)));
+  $final_url = $form_state['storage']['shurly']['final_url'] = rawurldecode(_surl($short_url, array('absolute' => TRUE)));
   $custom = $form_state['custom'];
   if (empty($form_state['url_exists'])) {
     shurly_save_url($long_url, $short_url, NULL, $custom);
@@ -470,7 +469,7 @@ function shurly_shorten($long_url, $custom = NULL, $account = NULL) {
     'success' => $success,
     'error' => $error,
     'longUrl' => $long_url,
-    'shortUrl' => isset($short) ? url($short, array('absolute' => TRUE)) : '',
+    'shortUrl' => isset($short) ? _surl($short, array('absolute' => TRUE)) : '',
   );
 }
 
@@ -492,7 +491,7 @@ function shurly_expand($short, $account = NULL) {
     'success' => $success,
     'error' => $error,
     'longUrl' => $long_url,
-    'shortUrl' => url($short, array('absolute' => TRUE)),
+    'shortUrl' => _surl($short, array('absolute' => TRUE)),
   );
 }
 
@@ -830,5 +829,37 @@ function shurly_goto($row) {
   // some cases this can be wrong, so we make sure none of the code below the
   // drupal_goto() call gets executed upon redirection.
   exit();
+}
 
+
+/**
+ * Internal function to call url() without language prefixing or subdomain rewrites
+ */
+function _surl($path = NULL, $options = array()) {
+  $options['language'] = _shurly_language_stub();
+  return url($path, $options);
+}
+
+/**
+ * Internal function to call l() without language prefixing or subdomain rewrites
+ */
+function _sl($text, $path, $options = array()) {
+  $options['language'] = _shurly_language_stub();
+  return l($text, $path, $options);
+}
+
+/**
+ * Return default language object which will avoid redirects and subdomains
+ * 
+ * This is necessary because we always want our short URLs to be
+ * the first item in the path, even if we've got another language enabled
+ */
+function _shurly_language_stub() {
+  static $language;
+  if (!isset($language)) {
+    $language = language_default();
+    $language->prefix = '';
+    $language->domain = '';
+  }
+  return $language;
 }

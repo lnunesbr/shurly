@@ -70,12 +70,12 @@ class shurly_handler_field_short_url extends views_handler_field {
         $text = $values->{$this->aliases['source']};
       }
       else {
-        $text = rawurldecode(url($values->{$this->aliases['source']}, array('absolute' => TRUE)));
+        $text = rawurldecode(_surl($values->{$this->aliases['source']}, array('absolute' => TRUE)));
       }
     }
     
     if ($this->options['link']) {
-      $text = '<a href="' . url($values->{$this->aliases['source']}, array('absolute' => TRUE)) . '">' . $text . '</a>';
+      $text = '<a href="' . _surl($values->{$this->aliases['source']}, array('absolute' => TRUE)) . '">' . $text . '</a>';
     }
     
     return $text;

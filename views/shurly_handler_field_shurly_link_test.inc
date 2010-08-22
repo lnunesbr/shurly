@@ -38,6 +38,6 @@ class shurly_handler_field_shurly_link_test extends views_handler_field {
   function render($values) {
     $text = !empty($this->options['text']) ? $this->options['text'] : t('test');
     $source = $values->shurly_source;
-    return l($text, $source);
+    return _sl($text, $source, array('language'));
   }
 }
