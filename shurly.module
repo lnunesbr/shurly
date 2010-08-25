@@ -5,9 +5,12 @@
  * @file description http://www.youtube.com/watch?v=Qo7qoonzTCE
  *
  * @todo
- *   - click to copy link in views
+ *   - click to copy link as a Views field
  *   - add some watchdog logging
  *   - remove "http://" from the long URL field when you click in
+ *   - add hook for other modules to create additional/substitute long URL validation
+ *   - add option/permission to reactivate URLs
+ *   - add tab order to the main form
  */
  
 /**
@@ -96,7 +99,7 @@ function shurly_block($op = 'list', $delta = 0, $edit = array()) {
 function shurly_boot() {
   // if the path has any unallowed characters in it (such as slashes), 
   // it's not a short URL, so we can bail out and save ourselves a database call
-  if (shurly_validate_custom($_GET['q'])) {
+  if ($_GET['q'] && shurly_validate_custom($_GET['q'])) {
     $row = db_fetch_object(db_query("SELECT rid, destination FROM {shurly} WHERE BINARY source = '%s' AND active = 1", $_GET['q']));
     if ($row) {
       shurly_goto($row);
@@ -178,6 +181,7 @@ function shurly_create_form($form_state) {
   $form['long_url'] = array(
     '#title' => t('Enter a long URL to make short'),
     '#type' => 'textfield',
+    '#maxlength' => 255,
     '#default_value' => isset($form_state['storage']['shurly']['long_url']) ? $form_state['storage']['shurly']['long_url'] : ($_GET['url'] ? $_GET['url'] : 'http://'),
   );
   
@@ -588,12 +592,14 @@ function shurly_set_link_active($rid, $active) {
  * @return TRUE if valid, FALSE if invalid
  */
 function shurly_validate_custom($custom) {
-  // we should probably check that $custom is a string here
-  
-  // we should check the length of the string
+
+  // check the length of the string
+  if (strlen($custom) == 0) {
+    return FALSE;
+  }
 
   // disallow: #%&@*{}\:;<>?/+.,'"$|`^[] and space character
-  return preg_match('/[#%&\@\*\{\}\\:\;<>\?\/\+ \.\,\'\"\$\|`^\[\]]/u', $custom) ? FALSE : TRUE;
+  return preg_match('/[\/#%&\@\*\{\}\\:\;<>\?\+ \.\,\'\"\$\|`^\[\]]/u', $custom) ? FALSE : TRUE;
 }
 
 
