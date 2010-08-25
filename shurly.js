@@ -14,7 +14,7 @@ Drupal.behaviors.shurly = function() {
     
     $('#edit-result')
       .focus()
-      .focus(function(e){
+      .focus(function(){
         $(this).select();
       })
       .mouseup(function(){
