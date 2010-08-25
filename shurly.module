@@ -10,7 +10,6 @@
  *   - remove "http://" from the long URL field when you click in
  *   - add hook for other modules to create additional/substitute long URL validation
  *   - add option/permission to reactivate URLs
- *   - add tab order to the main form
  */
  
 /**
@@ -183,11 +182,13 @@ function shurly_create_form($form_state) {
     '#type' => 'textfield',
     '#maxlength' => 255,
     '#default_value' => isset($form_state['storage']['shurly']['long_url']) ? $form_state['storage']['shurly']['long_url'] : ($_GET['url'] ? $_GET['url'] : 'http://'),
+    '#attributes' => array('tabindex' => 1),
   );
   
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Make it!'),
+    '#attributes' => array('tabindex' => 3),
   );
   
   $short_default = user_access('Enter custom URLs') ? (isset($form_state['storage']['shurly']['short_url']) ? $form_state['storage']['shurly']['short_url'] : '') : '';
@@ -199,6 +200,7 @@ function shurly_create_form($form_state) {
     '#field_suffix' => ' <span class="shurly-choose">&lt;--- ' . t('create custom URL') . '</span>',
     '#default_value' => $short_default,
     '#access' => user_access('Enter custom URLs'),
+    '#attributes' => array('tabindex' => 2),
   );
   
   if (isset($form_state['storage']['shurly']['final_url'])) {
