@@ -454,7 +454,7 @@ function shurly_shorten($long_url, $custom = NULL, $account = NULL) {
   }
   else {
     $short = $custom;
-    if (!shurly_validate_custom($short)) {
+    if (!shurly_validate_custom($short) || !shurly_path_available($short)) {
       $error .= $error ? ' ' : '';
       $error .= t('Invalid short URL.');
     }
