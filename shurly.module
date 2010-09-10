@@ -260,8 +260,8 @@ function shurly_create_form_validate(&$form, &$form_state) {
   if ($vals['long_url'] == '' || $vals['long_url'] == 'http://' || $vals['long_url'] == 'https://') {
     form_set_error('long_url', t('Please enter a web URL'));
   }
-  elseif (!shurly_validate_long($form_state['values']['long_url'])) {
-    form_set_error('long_url', t('Invalid URL'));
+  elseif (!shurly_validate_long($form_state['values']['long_url'], $form_state['values']['short_url'])) {
+    shurly_errors_to_form();
   }
   
   if (trim($vals['short_url']) != '') {
@@ -272,20 +272,12 @@ function shurly_create_form_validate(&$form, &$form_state) {
     }
     elseif ($exists = shurly_url_exists($vals['short_url'], $vals['long_url'])) {
       form_set_error('short_url', t('This short URL has already been used'));
-      //if ($exists == 'found') {
-      //  form_set_error('short_url', t('This short URL is already used'));
-      //}
-      //else {
-      //  $form_state['storage']['shurly']['final_url'] = url($vals['short_url'], array('absolute' => TRUE));
-      //  $form_state['url_exists'] = TRUE;
-      //  drupal_set_message(t('This URL pair already exists'), 'error');
-      //}
     }
-    elseif (_surl($vals['short_url'], array('absolute' => TRUE)) == $vals['long_url']) {
+    //elseif (_surl($vals['short_url'], array('absolute' => TRUE)) == $vals['long_url']) {
       // check that link isn't to itself (creating infinite loop)
       // problem - http vs https
-      form_set_error('short_url', t('You cannot create links to themselves'));
-    }
+      //form_set_error('short_url', t('You cannot create links to themselves'));
+    //}
     elseif (!shurly_path_available($vals['short_url'])) {
       form_set_error('short_url', t('This custom URL is reserved. Please choose another.'));
     }
@@ -439,7 +431,7 @@ function shurly_shorten($long_url, $custom = NULL, $account = NULL) {
     $error = t('Rate limit exceeded. You are limited to @rate requests per @time minute period.', array('@rate' => $rate_limit['rate'], '@time' => $rate_limit['time']));
   }
   elseif (!shurly_validate_long($long_url)) {
-    $error = t('Invalid long URL.');
+    $error = implode(' ', shurly_get_errors());
   }
   elseif (is_null($custom)) {
     $latest = shurly_get_latest_short($long_url, $account->uid);
@@ -604,8 +596,22 @@ function shurly_validate_custom($custom) {
   return preg_match('/[\/#%&\@\*\{\}\\:\;<>\?\+ \.\,\'\"\$\|`^\[\]]/u', $custom) ? FALSE : TRUE;
 }
 
-
-function shurly_validate_long(&$long_url) {
+/**
+ * Validate a long URL
+ * 
+ * Checks for:
+ * - a valid URL
+ * - it's not a link to an existing short URL
+ * - it's not a link to itself
+ *
+ * @param
+ * $long url - the long URL entered by user
+ * $custom - custom short URL entered by user
+ *
+ * @return
+ * BOOLEAN - TRUE if valid, FALSE if invalid
+ */
+function shurly_validate_long(&$long_url, $custom = NULL) {
   $return = TRUE;
   $match = FALSE;
   
@@ -618,10 +624,12 @@ function shurly_validate_long(&$long_url) {
   if ($long_parse === FALSE || !$long_parse['host']) {
     // malformed URL
     // or no host in the URL
+    shurly_set_error(t('Invalid URL.'), 'long_url');
     $return = FALSE;
   }
   elseif ($long_parse['scheme'] != 'http' && $long_parse['scheme'] != 'https') {
-    $return = FALSE; 
+    shurly_set_error(t('Invalid URL. Only http:// and https:// URLs are allowed.'), 'long_url');
+    $return = FALSE;
   }
   else {
     $long_domain_parts = explode('.', $long_parse['host']);
@@ -674,11 +682,17 @@ function shurly_validate_long(&$long_url) {
             $path = preg_replace('!'. preg_quote($base, '!') .'!i', '', $path);
           }
           if (shurly_url_exists($path)) {
+            // link to existing short URL
+            shurly_set_error(t('Illegal URL'), 'long_url');
+            $return = FALSE;
+          }
+          if ($custom && $custom == $path) {
+            // they've created a link to itself
+            shurly_set_error(t('Recursive URL'), 'short_url');
             $return = FALSE;
           }
         }
       }
-      
     }
   }
   return $return;
@@ -844,6 +858,35 @@ function shurly_goto($row) {
   // some cases this can be wrong, so we make sure none of the code below the
   // drupal_goto() call gets executed upon redirection.
   exit();
+}
+
+/**
+ * Set an validation error
+ * We don't call form_set_error() directly because we don't want to be 
+ * calling drupal_set_message() during API calls
+ */
+function shurly_set_error($message = NULL, $field = NULL) {
+  static $errors = array();
+  if ($message) {
+    $errors[] = array('message' => $message, 'field' => $field);
+  }
+  return $errors;
+}
+
+function shurly_get_errors() {
+  $errors = shurly_set_error();
+  $return = array();
+  foreach ($errors as $error) {
+    $return[] = $error['message'];
+  }
+  return $return;
+}
+
+function shurly_errors_to_form() {
+  $errors = shurly_set_error();
+  foreach ($errors as $error) {
+    form_set_error($error['field'], $error['message']);
+  }
 }
 
 
