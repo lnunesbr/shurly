@@ -37,6 +37,12 @@ function shurly_service_menu() {
     'access callback' => TRUE,
     'type'             => MENU_CALLBACK,
   );
+  $items['shurly/api/key'] = array(
+    'file'             => 'shurly_service.inc',
+    'page callback'    => 'shurly_service_get_key',
+    'access callback' => TRUE,
+    'type'             => MENU_CALLBACK,
+  );
 
   return $items;
 }

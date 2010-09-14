@@ -17,7 +17,7 @@ function shurly_service_shorten() {
     //'shortUrl' => '', // intentionally not implemented for now...
     // 'login' => NULL,
     'apiKey' => NULL,
-    'func' => 'urlData', // function name for padded JSON
+    'callback' => 'urlData', // function name for padded JSON
   );
   $input = $_REQUEST + $defaults;
   $account = NULL;
@@ -52,7 +52,7 @@ function shurly_service_expand() {
     'shortUrl' => '',
     // 'login' => NULL,
     'apiKey' => NULL,
-    'func' => 'urlData', // function name for padded JSON
+    'callback' => 'getKey', // function name for padded JSON
   );
   $input = $_REQUEST + $defaults;
   $account = NULL;
@@ -75,6 +75,36 @@ function shurly_service_expand() {
     
   shurly_service_output($data, $input);
   
+}
+
+function shurly_service_get_key() {
+  $defaults = array(
+    'format' => 'json',
+    'callback' => 'getData', // function name for padded JSON
+  );
+  $input = $_REQUEST + $defaults;
+  module_load_include('inc', 'shurly_service', 'shurly_api_keys');
+  global $user;
+  $key = FALSE;
+  $success = FALSE;
+  $error = '';
+  if ($user->uid) {
+    $key = shurly_get_api_key($user->uid);
+    $success = TRUE;
+  }
+  else {
+    // user isn't logged in
+    $error = t('User is not logged in');
+  }
+  if (!$key && $user->uid) {
+    $error = t('User has no API key');
+  }
+  $data = array(
+    'success' => $success,
+    'error' => $error,
+    'key' => $key,
+  );
+  shurly_service_output($data, $input);
 }
 
 /**
@@ -101,7 +131,7 @@ function shurly_service_output_json($data) {
  * Output JSON data
  */
 function shurly_service_output_jsonp($data, $input) {
-  $func = $input['func'] ? $input['func'] : 'urlData';
+  $func = $input['callback'] ? $input['callback'] : 'getData';
   // send the header
   drupal_json();
   print $func . '(' . drupal_to_js($data) . ');';
@@ -117,7 +147,9 @@ function shurly_service_output_txt($data) {
     case 'expand':
       $key = 'longUrl';
       break;
-  
+    case 'key':
+      $key = 'key';
+      break;
     case 'shorten':
     default:
       $key = 'shortUrl';
