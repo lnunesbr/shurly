@@ -90,14 +90,21 @@ function shurly_service_get_key() {
   $error = '';
   if ($user->uid) {
     $key = shurly_get_api_key($user->uid);
-    $success = TRUE;
+    if (!$key) {
+      // user doesn't have a key yet, let's get one
+      $key = shurly_generate_new_api_key($user->uid);
+    }
+    if ($key) {
+      $success = TRUE;
+    }
+    else {
+      // honestly, we should never really end up here
+      $error = t('User has no API key');
+    }
   }
   else {
     // user isn't logged in
     $error = t('User is not logged in');
-  }
-  if (!$key && $user->uid) {
-    $error = t('User has no API key');
   }
   $data = array(
     'success' => $success,
