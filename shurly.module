@@ -468,12 +468,14 @@ function shurly_shorten($long_url, $custom = NULL, $account = NULL) {
     'error' => $error,
     'longUrl' => $long_url,
     'shortUrl' => isset($short) ? _surl($short, array('absolute' => TRUE)) : '',
+    'user' => (int)$account->uid,
   );
 }
 
 function shurly_expand($short, $account = NULL) {
   $error = '';
   $success = FALSE;
+  $account = ($account) ? $account : $GLOBALS['user'];
   $rate_limit = shurly_rate_limit_allowed($account);
   if (!$rate_limit['allowed']) {
     $error = t('Rate limit exceeded. You are limited to @rate requests per @time minute period.', array('@rate' => $rate_limit['rate'], '@time' => $rate_limit['time']));
@@ -490,6 +492,7 @@ function shurly_expand($short, $account = NULL) {
     'error' => $error,
     'longUrl' => $long_url,
     'shortUrl' => _surl($short, array('absolute' => TRUE)),
+    'user' => (int)$account->uid,
   );
 }
 
