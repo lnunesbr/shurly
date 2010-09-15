@@ -15,9 +15,9 @@ function shurly_service_shorten() {
     // 'domain' => NULL,
     'longUrl' => '',
     //'shortUrl' => '', // intentionally not implemented for now...
-    // 'login' => NULL,
     'apiKey' => NULL,
     'callback' => 'urlData', // function name for padded JSON
+    'primary' => 'shortUrl', // primary value to return in txt format
   );
   $input = $_REQUEST + $defaults;
   $account = NULL;
@@ -47,12 +47,11 @@ function shurly_service_shorten() {
 function shurly_service_expand() {
   $defaults = array(
     'format' => 'json',
-    // 'domain' => NULL,
     //'longUrl' => '',
     'shortUrl' => '',
-    // 'login' => NULL,
     'apiKey' => NULL,
     'callback' => 'getKey', // function name for padded JSON
+    'primary' => 'longUrl',
   );
   $input = $_REQUEST + $defaults;
   $account = NULL;
@@ -81,6 +80,7 @@ function shurly_service_get_key() {
   $defaults = array(
     'format' => 'json',
     'callback' => 'getData', // function name for padded JSON
+    'primary' => 'key',
   );
   $input = $_REQUEST + $defaults;
   module_load_include('inc', 'shurly_service', 'shurly_api_keys');
@@ -110,6 +110,7 @@ function shurly_service_get_key() {
     'success' => $success,
     'error' => $error,
     'key' => $key,
+    'user' => (int)$user->uid,
   );
   shurly_service_output($data, $input);
 }
@@ -148,21 +149,9 @@ function shurly_service_output_jsonp($data, $input) {
  * Output txt data
  *  Just outputs the shortUrl attribute... won't show errors
  */
-function shurly_service_output_txt($data) {
-  // sniff the URL and figure out what to output
-  switch (arg(2)) {
-    case 'expand':
-      $key = 'longUrl';
-      break;
-    case 'key':
-      $key = 'key';
-      break;
-    case 'shorten':
-    default:
-      $key = 'shortUrl';
-  }
+function shurly_service_output_txt($data, $input) {
   if ($data['success']) {
-    print $data[$key];
+    print $data[$input['primary']];
   }
   else {
     print t("ERROR: !error", array('!error' => $data['error']));
