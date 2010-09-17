@@ -7,7 +7,6 @@
  * @todo
  *   - click to copy link as a Views field
  *   - add some watchdog logging
- *   - remove "http://" from the long URL field when you click in
  *   - add hook for other modules to create additional/substitute long URL validation
  *   - add option/permission to reactivate URLs
  */
@@ -413,7 +412,8 @@ function shurly_flood_is_allowed($name, $threshold, $window = 3600, $identifier 
 /**
  * API function to shorten a URL
  * @arg $long_url - the long URL to shorten
- * @arg $custom - optional custom short URL
+ * @arg $custom - optional custom short URL,
+ *   user_access('enter custom URLs') should be checked prior to calling shurly_shorten()
  *
  * @return an array with the following keys
  *   'success' => TRUE or FALSE
