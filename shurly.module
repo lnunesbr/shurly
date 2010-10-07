@@ -83,7 +83,8 @@ function shurly_block($op = 'list', $delta = 0, $edit = array()) {
       if ($delta == 'bookmarklet' && user_access('Create short URLs')) {
         drupal_add_css(drupal_get_path('module', 'shurly') . '/shurly.css');
         $block = array('subject' => t('Bookmarklet'),
-          'content' => t("<p>Drag this link to your bookmark bar to quickly create a short URL from any page: <a class=\"shurly-bookmarklet\" href=\"!jsurl\">!sitename</a></p>", array('!jsurl' => "javascript:void(location.href='". _surl('shurly', array('absolute' => TRUE)) ."?url='+encodeURIComponent(location.href))", '!sitename' => variable_get('site_name', 'Drupal'))),
+          'content' => t("<p>Drag this link to your bookmark bar to quickly create a short URL from any page: <a class=\"shurly-bookmarklet\" href=\"!jsurl\">!sitename</a><br />
+Or install the <a href=\"http://github.com/downloads/Lullabot/shurly/shurly.safariextz\">Safari browser extension</a>.</p>", array('!jsurl' => "javascript:void(location.href='". _surl('shurly', array('absolute' => TRUE)) ."?url='+encodeURIComponent(location.href))", '!sitename' => variable_get('site_name', 'Drupal'))),
         );
         return $block;
       }
