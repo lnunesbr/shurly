@@ -19,6 +19,7 @@ Features
 - Click tracking on each short URL
 - Short URLs are associated with user accounts. Logged-in users can see their URLs history as well as the number of clicks on each.
 - "Drag to bookmark bar" Javascript bookmarklet to create URLs quickly from any web page
+- [Safari browser extension](http://github.com/downloads/Lullabot/shurly/shurly.safariextz) to create URLs without leaving current web page
 - Blocks for URL creation form, bookmarklet, and URL history
 - Views integration. Short URLs are displayable objects
 - Magic happens during `hook_boot()` for fast, efficient, and early redirection. Doesn't require a full Drupal bootstrap to redirect. Also redirection works even if page caching is turned on. If unsupported short-url characters (such as "/") are part of the incoming URL, ShURLy doesn't even add a database query.
