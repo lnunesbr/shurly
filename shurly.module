@@ -77,8 +77,9 @@ function shurly_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['admin/config/shurly/settings'] = array(
-    'title' => 'Shurly Settings',
+  $items['admin/config/system/shurly'] = array(
+    'title' => 'ShURLy',
+    'description'      => t('Limit the requests of ShURLy links by roles.'),
     'page callback' => 'drupal_get_form',
     'page arguments' => array('shurly_settings_form'),
     'access arguments' => array('Administer short URLs'),
