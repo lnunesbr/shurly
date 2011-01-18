@@ -2,6 +2,10 @@
 // $Id$
 
 /**
+ * @file
+ */
+
+/**
  * Implement hook_schema().
  */
 function shurly_service_schema() {
@@ -26,35 +30,4 @@ function shurly_service_schema() {
     ),
   );
   return $schema;
-}
-
-/**
- * Implement hook_install().
- */
-function shurly_service_install() {
-  drupal_install_schema('shurly_service');
-}
-
-
-function shurly_service_update_6100() {
-  $module = 'shurly_service';
-  $schema = drupal_get_schema_unprocessed($module);
-  _drupal_initialize_schema($module, $schema);
-  
-  $ret = array();
-  db_create_table($ret, 'shurly_keys', $schema['shurly_keys']);
-  
-  return $ret;
-}
-
-/**
- * Implement hook_uninstall().
- */
-function shurly_service_uninstall() {
-  // Remove tables.
-  drupal_uninstall_schema('shurly_service');
-
-  // No variables to remove
-  
-  
 }

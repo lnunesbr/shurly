@@ -1,6 +1,9 @@
 <?php
 // $Id$
 
+/**
+ * @file
+ */
 
 define('API_VERSION', 'A');
 
@@ -13,16 +16,16 @@ function shurly_generate_new_api_key($uid) {
   do {
     $key = md5(uniqid(rand(), TRUE)) . '_' . API_VERSION;
   } while (shurly_get_uid($key));
-  db_query('DELETE FROM {shurly_keys} WHERE uid = %d', $uid);
-  $result = db_query("INSERT INTO {shurly_keys} (uid, apikey) VALUES (%d,'%s')", $uid, $key);
+  db_query('DELETE FROM {shurly_keys} WHERE uid = :uid', array('uid' => $uid));
+  $result = db_query("INSERT INTO {shurly_keys} (uid, apikey) VALUES (:uid, :key)", array('uid' => $uid, 'key' => $key));
   return $result ? $key : FALSE;
 }
 
 function shurly_get_uid($key) {
-  return db_result(db_query("SELECT uid FROM {shurly_keys} WHERE apikey = '%s'", $key));
+  return db_query("SELECT uid FROM {shurly_keys} WHERE apikey = :key", array('key' => $key))->fetchField();
 }
 
 function shurly_get_api_key($uid) {
-  return db_result(db_query("SELECT apikey FROM {shurly_keys} WHERE uid = %d", $uid));
+  return db_query("SELECT apikey FROM {shurly_keys} WHERE uid = :uid", array('uid' => $uid))->fetchField();
 }
 

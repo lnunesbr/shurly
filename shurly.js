@@ -1,5 +1,6 @@
 // $Id$
-Drupal.behaviors.shurly = function() {
+(function($){
+$(document).ready(function(){
   if ($('#edit-result').length) {
     var clip = new ZeroClipboard.Client();
     clip.setText($('#edit-result').val());
@@ -22,4 +23,5 @@ Drupal.behaviors.shurly = function() {
         return false;
       });
   }
-}
+});
+})(jQuery);

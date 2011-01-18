@@ -2,7 +2,8 @@
 // $Id$
 
 /**
- * @file Shurly Views handler for test link
+ * @file
+ * Shurly Views handler for test link
  */
 
 /**

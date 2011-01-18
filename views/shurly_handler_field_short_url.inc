@@ -2,7 +2,8 @@
 // $Id$
 
 /**
- * @file Shurly Views handler for short URL
+ * @file
+ * Shurly Views handler for short URL
  */
 
 /**
@@ -26,18 +27,18 @@ class shurly_handler_field_short_url extends views_handler_field {
 
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
-    
+
     // this field will never be empty
     unset($form['empty']);
     unset($form['hide_empty']);
     unset($form['hide_empty']);
-    
+
     $form['text'] = array(
       '#type' => 'textfield',
       '#title' => t('Text to display'),
       '#default_value' => $this->options['text'],
     );
-    
+
     $form['longshort'] = array(
       '#type' => 'radios',
       '#options' => array(
@@ -73,11 +74,11 @@ class shurly_handler_field_short_url extends views_handler_field {
         $text = rawurldecode(_surl($values->{$this->aliases['source']}, array('absolute' => TRUE)));
       }
     }
-    
+
     if ($this->options['link']) {
       $text = '<a href="' . _surl($values->{$this->aliases['source']}, array('absolute' => TRUE)) . '">' . $text . '</a>';
     }
-    
+
     return $text;
   }
 }

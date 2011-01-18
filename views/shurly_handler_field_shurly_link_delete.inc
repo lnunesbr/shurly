@@ -2,7 +2,8 @@
 // $Id$
 
 /**
- * @file Shurly Views handler for delete links function
+ * @file
+ * Shurly Views handler for delete links function
  */
 
 /**
@@ -13,6 +14,7 @@ class shurly_handler_field_shurly_link_delete extends views_handler_field {
     parent::construct();
     $this->additional_fields['uid'] = 'uid';
     $this->additional_fields['active'] = 'active';
+    $this->additional_fields['rid'] = 'rid';
   }
 
   function option_definition() {

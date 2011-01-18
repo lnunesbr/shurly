@@ -2,11 +2,12 @@
 // $Id$
 
 /**
- * @file Shurly install file
+ * @file
+ * Shurly install file
  */
 
 /**
- * Implement hook_schema().
+ * Implements hook_schema().
  */
 function shurly_schema() {
   $schema = array();
@@ -69,7 +70,7 @@ function shurly_schema() {
       'source' => array('source'),
     ),
   );
-  
+
   $schema['shurly_flood'] = array(
     'description' => t('Flood controls the threshold of events, such as the number of contact attempts.'),
     'fields' => array(
@@ -112,36 +113,14 @@ function shurly_schema() {
     ),
   );
 
-
-  
   return $schema;
 }
 
 
 /**
- * Implement hook_install().
- */
-function shurly_install() {
-  drupal_install_schema('shurly');
-}
-
-function shurly_update_6100() {
-  $module = 'shurly';
-  $schema = drupal_get_schema_unprocessed($module);
-  _drupal_initialize_schema($module, $schema);
-  
-  $ret = array();
-  db_create_table($ret, 'shurly_flood', $schema['shurly_flood']);
-  
-  return $ret;
-}
-
-/**
  * Implement hook_uninstall().
  */
 function shurly_uninstall() {
-  // Remove tables.
-  drupal_uninstall_schema('shurly');
 
   // Remove variables.
   variable_del('shurly_throttle');

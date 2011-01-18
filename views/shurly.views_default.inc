@@ -2,7 +2,11 @@
 // $Id$
 
 /**
- * Implementation of hook_views_default_views().
+ * @file
+ */
+
+/**
+ * Implements hook_views_default_views().
  */
 function shurly_views_default_views() {
   /*

@@ -3,4 +3,12 @@ name = ShURLy
 package = ShURLy
 description = A complete short URL service.
 dependencies[] = views
-core = 6.x
+core = 7.x
+project = "shurly"
+
+; Views Handlers
+files[] = views/shurly_handler_field_short_url.inc
+files[] = views/shurly_handler_field_shurly_link_delete.inc
+files[] = views/shurly_handler_field_shurly_link_test.inc
+files[] = views/shurly.views.inc
+files[] = views/shurly.views_default.inc

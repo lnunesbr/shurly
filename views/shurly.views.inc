@@ -2,7 +2,8 @@
 // $Id$
 
 /**
- * @file Shurly Views data include file
+ * @file
+ * Shurly Views data include file
  */
 
 function shurly_views_data() {
@@ -18,14 +19,14 @@ function shurly_views_data() {
     'help' => t('Shurly shortened URLs.'),
     'weight' => 10,
   );
-  
+
   //$data['shurly']['table']['join'] = array(
   //  'users' => array(
   //    'left_field' => 'uid',
   //    'field' => 'uid',
   //  ),
   //);
-  
+
   // note that this next line adds to the $data['users'] array
   // and avoids us from having to do relationships in order to get
   // user data into our Views of Shurly links
@@ -33,7 +34,7 @@ function shurly_views_data() {
     'left_field' => 'uid',
     'field' => 'uid',
   );
-  
+
   // User ID
   $data['shurly']['uid'] = array(
     'title' => t('User ID'),
@@ -60,7 +61,7 @@ function shurly_views_data() {
       'label' => t('user'),
     ),
   );
-  
+
   // uid
   $data['shurly']['uid_current'] = array(
     'real field' => 'uid',
@@ -71,7 +72,7 @@ function shurly_views_data() {
       'type' => 'yes-no',
     ),
   );
-  
+
   // Shurly Source - Short URL
   $data['shurly']['source'] = array(
     'title' => t('Short URL'),
@@ -91,7 +92,7 @@ function shurly_views_data() {
       'handler' => 'views_handler_argument_string',
     ),
   );
-  
+
   // Shurly Desination - Long URL
   $data['shurly']['destination'] = array(
     'title' => t('Long URL'),
@@ -130,8 +131,8 @@ function shurly_views_data() {
       'handler' => 'views_handler_argument_date',
     ),
   );
-  
-    // Count
+
+  // Count
   $data['shurly']['count'] = array(
     'title' => t('Clicks'),
     'help' => t('Number of times this link has been followed.'),
@@ -151,7 +152,7 @@ function shurly_views_data() {
     ),
 
   );
-  
+
   // Link last used timestamp
   $data['shurly']['last_used'] = array(
     'title' => t('Last used date'),
@@ -170,7 +171,7 @@ function shurly_views_data() {
       'handler' => 'views_handler_argument_date',
     ),
   );
-  
+
   // Boolean for custom entry
   $data['shurly']['custom'] = array(
     'title' => t('Custom URL'),
@@ -191,7 +192,7 @@ function shurly_views_data() {
       'handler' => 'views_handler_argument_numeric',
     ),
   );
-  
+
   // Boolean for active link
   $data['shurly']['active'] = array(
     'title' => t('URL active'),
@@ -212,7 +213,7 @@ function shurly_views_data() {
       'handler' => 'views_handler_argument_numeric',
     ),
   );
-  
+
   $data['shurly']['link_test'] = array(
     'field' => array(
       'title' => t('Test URL'),
@@ -221,7 +222,7 @@ function shurly_views_data() {
       'parent' => 'views_handler_field',
     ),
   );
-  
+
   $data['shurly']['link_delete'] = array(
     'field' => array(
       'title' => t('Delete URL'),
@@ -234,24 +235,3 @@ function shurly_views_data() {
   return $data;
 }
 
-/**
- * Implementation of hook_views_handlers().
- */
-function shurly_views_handlers() {
-  return array(
-    'info' => array(
-      'path' => drupal_get_path('module', 'shurly') . '/views',
-    ),
-    'handlers' => array(
-      'shurly_handler_field_shurly_link_delete' => array(
-        'parent' => 'views_handler_field',
-      ),
-      'shurly_handler_field_shurly_link_test' => array(
-        'parent' => 'views_handler_field',
-      ),
-      'shurly_handler_field_short_url' => array(
-        'parent' => 'views_handler_field',
-      ),
-    ),
-  );
-}
