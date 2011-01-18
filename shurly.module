@@ -858,7 +858,7 @@ function shurly_url_exists($short, $long = NULL) {
   if ($redirect) {
     $return = 'found';
   }
-  if ($long && $redirect->destination == $long) {
+  if ($long && $redirect && $redirect->destination == $long) {
     $return = 'match';
   }
   return $return;
