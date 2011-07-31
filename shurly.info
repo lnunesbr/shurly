@@ -3,6 +3,7 @@ name = ShURLy
 package = ShURLy
 description = A complete short URL service.
 dependencies[] = views
+configure = admin/config/system/shurly
 core = 7.x
 project = "shurly"
 
