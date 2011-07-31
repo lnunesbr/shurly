@@ -178,7 +178,6 @@ function shurly_boot() {
   // it's not a short URL, so we can bail out and save ourselves a database call
   if ($_GET['q'] && shurly_validate_custom($_GET['q'])) {
     $row = db_query("SELECT rid, destination FROM {shurly} WHERE BINARY source = :q AND active = 1", array(':q' => $_GET['q']))->fetchObject();
-    //var_dump($row);die;
     if ($row) {
       shurly_goto($row);
     }
@@ -741,17 +740,18 @@ function shurly_validate_long(&$long_url) {
       // by the way, we're ignoring any subdomain...
       // so http://lbt.me/something and http://www.lbt.me/something are assumed to be the same
       if ($match) {
-        // let's see if there's a $_GET['q'] in the long URL
-        $query = $long_parse['query'];
-        $query  = html_entity_decode($query);
-        $query_array  = explode('&', $query);
         $queries  = array();
-        foreach ($query_array as $val) {
-          $x = explode('=', $val);
-          $queries[$x[0]] = $x[1];
+        if(isset($long_parse['query'])){
+          // let's see if there's a $_GET['q'] in the long URL
+          $query = $long_parse['query'];
+          $query  = html_entity_decode($query);
+          $query_array  = explode('&', $query);
+          foreach ($query_array as $val) {
+            $x = explode('=', $val);
+            $queries[$x[0]] = $x[1];
+          }
         }
-
-        if ($queries['q']) {
+        if (isset($queries['q'])) {
           // if there's a 'q' query, Drupal uses this instead of anything in the path
           $path = $queries['q'];
         }
