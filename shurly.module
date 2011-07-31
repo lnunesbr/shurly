@@ -606,6 +606,9 @@ function shurly_rate_limit_allowed($account = NULL) {
         $settings[$use_rid]['weight'] = isset($settings[$use_rid]['weight']) ? $settings[$use_rid]['weight'] : 0;
         $settings[$rid]['weight'] = isset($settings[$rid]['weight']) ? $settings[$rid]['weight'] : 0;
         $use_rid = $settings[$use_rid]['weight'] < $settings[$rid]['weight'] ? $use_rid : $rid;
+        //Create array index if not exists for rate and time
+        $settings[$use_rid]['rate'] = isset($settings[$use_rid]['rate']) ? $settings[$use_rid]['rate'] : NULL;
+        $settings[$use_rid]['time'] = isset($settings[$use_rid]['time']) ? $settings[$use_rid]['time'] : NULL;
       }
     }
   }
